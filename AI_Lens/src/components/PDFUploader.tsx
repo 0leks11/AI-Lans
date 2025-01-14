@@ -1,32 +1,21 @@
-import React, { useRef } from "react";
+import React from "react";
+import { usePdf } from "../context/pdfContext";
 
-function PDFUploader({ onFileSelect }) {
-  const fileInputRef = useRef(null);
-
-  const handleButtonClick = () => {
-    fileInputRef.current.click();
-  };
+function PDFUploader() {
+  const { openPDF } = usePdf();
 
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
+    const file = event.target.files[0] as File;
+
     if (file && file.type === "application/pdf") {
-      onFileSelect(file);
-    } else {
-      alert("Choice PDF-file.");
+      openPDF(file);
     }
   };
 
   return (
-    <div>
-      <button onClick={handleButtonClick}>Загрузить</button>
-      <input
-        type="file"
-        accept="application/pdf"
-        ref={fileInputRef}
-        style={{ display: "none" }}
-        onChange={handleFileChange}
-      />
-    </div>
+    <label>
+      <input type="file" accept="application/pdf" onChange={handleFileChange} />
+    </label>
   );
 }
 

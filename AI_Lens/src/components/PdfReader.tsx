@@ -1,31 +1,24 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import interact from "interactjs";
-import { usePdf } from "../hooks/usePdf";
+import { usePdf } from "../context/pdfContext";
 import { PdfNavigation } from "./PdfNavigation";
 import { PdfPage } from "./PdfPage";
 import { useOpenAI } from "../hooks/useOpenAI";
 import { ReUseButton } from "./ReUseButton";
 
 export const PdfReader = () => {
-  const {
-    pdfDoc,
-    currentPage,
-    totalPages,
-    handlePrevPage,
-    handleNextPage,
-    handleCanvasRef,
-    pdfCanvas,
-  } = usePdf("/Ge.pdf");
+  const { currentPage, totalPages, canvasRef, goToNextPage, goToPrevPage } =
+    usePdf();
 
   const { responseHtml, sendToOpenAI } = useOpenAI();
 
-  const handleSendToOpenAI = () => {
-    if (pdfCanvas) {
-      sendToOpenAI(pdfCanvas);
+  const handleSendToOpenAI = useCallback(() => {
+    if (canvasRef.current) {
+      sendToOpenAI(canvasRef.current);
     } else {
       console.error("Canvas is not ready");
     }
-  };
+  }, [canvasRef]);
 
   useEffect(() => {
     function dragMoveListener(event: any) {
@@ -65,18 +58,14 @@ export const PdfReader = () => {
     <section className=" text-white max-w-7xl mx-auto rounded-lg mt-6 mb-6 p-8">
       <div className="flex bg-slate-100 flex-row md:flex-row rounded-lg p-2">
         <div className="flex flex-col md:w-1/2 md:pr-8 ml-4 mb-2">
-          <PdfPage
-            pdfDoc={pdfDoc}
-            pageNumber={currentPage}
-            onCanvasRef={handleCanvasRef}
-          />{" "}
+          <PdfPage />
           <div className="relative flex items-center h-full">
             <div className="absolute left-1/2 transform -translate-x-1/2 text-slate-500">
               <PdfNavigation
                 currentPage={currentPage}
                 totalPages={totalPages}
-                onPrevPage={handlePrevPage}
-                onNextPage={handleNextPage}
+                onPrevPage={goToPrevPage}
+                onNextPage={goToNextPage}
               />
             </div>
 

@@ -6,12 +6,9 @@ export const PageSection: React.FC = () => {
   return (
     <section className=" max-w-8xl ">
       <PdfReader />
-      {/* <div className="ml-auto">
-              <ReUseButton
-                onClick={}
-                button={<p>Load file</p>}
-              />
-            </div> */}
+      <div className="ml-auto">
+        <PDFUploader />
+      </div>
     </section>
   );
 };
