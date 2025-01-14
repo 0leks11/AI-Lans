@@ -4,8 +4,7 @@ import OpenAI from "openai";
 
 const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
-  apiKey:
-    "KEY_FOR_OPENAI",
+  apiKey: "sk-",
 });
 
 export const useOpenAI = () => {
@@ -15,7 +14,7 @@ export const useOpenAI = () => {
     const base64Image = canvas.toDataURL();
     try {
       const response = await openai.chat.completions.create({
-        model: "gpt-4o",
+        model: "gpt-4o-mini",
         messages: [
           {
             role: "user",

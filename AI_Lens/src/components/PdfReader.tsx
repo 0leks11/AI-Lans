@@ -53,16 +53,6 @@ export const PdfReader = () => {
       autoScroll: true,
       listeners: {
         move: dragMoveListener,
-        end(event) {
-          const textEl = event.target.querySelector("p");
-          if (textEl) {
-            const distance = Math.sqrt(
-              Math.pow(event.pageX - event.x0, 2) +
-                Math.pow(event.pageY - event.y0, 2)
-            ).toFixed(2);
-            textEl.textContent = `moved a distance of ${distance}px`;
-          }
-        },
       },
     });
 
@@ -75,7 +65,7 @@ export const PdfReader = () => {
 
   return (
     <section className=" text-white max-w-7xl mx-auto rounded-lg mt-6 mb-6 p-8">
-      <div className="flex bg-slate-100 flex-row md:flex-row rounded-lg">
+      <div className="flex bg-slate-100 flex-row md:flex-row rounded-lg p-2">
         <div className="flex flex-col md:w-1/2 md:pr-8 ml-4 mb-2">
           <PdfPage
             pdfDoc={pdfDoc}
