@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import interact from "interactjs";
-import { usePdf } from "./hooks/usePdf";
+import { usePdf } from "../hooks/usePdf";
 import { PdfNavigation } from "./PdfNavigation";
 import { PdfPage } from "./PdfPage";
-import { useOpenAI } from "./hooks/useOpenAI";
-import { SendButton } from "./SendButton";
-import { Collapsible } from "./Collapsible";
+import { useOpenAI } from "../hooks/useOpenAI";
+import { ReUseButton } from "./ReUseButton";
 
 export const PdfReader = () => {
   const {
@@ -29,7 +28,6 @@ export const PdfReader = () => {
   };
 
   useEffect(() => {
-    // Функция-слушатель перемещения
     function dragMoveListener(event: any) {
       const target = event.target as HTMLElement;
       const x =
@@ -61,7 +59,7 @@ export const PdfReader = () => {
     return () => {
       interact(".draggable").unset();
     };
-  }, []); //
+  }, []);
 
   return (
     <section className=" text-white max-w-7xl mx-auto rounded-lg mt-6 mb-6 p-8">
@@ -83,7 +81,10 @@ export const PdfReader = () => {
             </div>
 
             <div className="ml-auto">
-              <SendButton onClick={handleSendToOpenAI} />
+              <ReUseButton
+                onClick={handleSendToOpenAI}
+                button={<p>AI Lens</p>}
+              />
             </div>
           </div>
         </div>

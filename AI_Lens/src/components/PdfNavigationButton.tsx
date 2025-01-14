@@ -1,16 +1,15 @@
 import React, { FC, ReactNode } from "react";
 import Arrow from "./Arrow";
 
-interface ActiveButtonProps {
+interface PdfNavigationButtonProps {
   onClick?: () => void;
   disabled?: boolean;
   icon?: ReactNode;
 }
 
-export const ActiveButton: FC<ActiveButtonProps> = ({
+export const PdfNavigationButton: FC<PdfNavigationButtonProps> = ({
   onClick,
   disabled,
-
   icon,
 }) => {
   const handleClick = (e: React.MouseEvent) => {

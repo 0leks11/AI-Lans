@@ -1,6 +1,6 @@
 import React from "react";
-import { PdfReader } from "./components/PdfReader";
+import PageSection from "./components/PageSection";
 
 export const App: React.FC = () => {
-  return <PdfReader />;
+  return <PageSection />;
 };

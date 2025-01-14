@@ -1,5 +1,5 @@
 import React from "react";
-import { ActiveButton } from "./ActiveButton";
+import { PdfNavigationButton } from "./PdfNavigationButton";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 
@@ -18,7 +18,7 @@ export const PdfNavigation: React.FC<PdfNavigationProps> = ({
 }) => {
   return (
     <div className="flex gap-2 my-4">
-      <ActiveButton
+      <PdfNavigationButton
         onClick={onPrevPage}
         disabled={currentPage <= 1}
         icon={
@@ -30,7 +30,7 @@ export const PdfNavigation: React.FC<PdfNavigationProps> = ({
         {currentPage} / {totalPages}
       </span>
 
-      <ActiveButton
+      <PdfNavigationButton
         onClick={onNextPage}
         disabled={currentPage >= totalPages}
         icon={

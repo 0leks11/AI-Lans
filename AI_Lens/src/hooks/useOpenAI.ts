@@ -4,7 +4,7 @@ import OpenAI from "openai";
 
 const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
-  apiKey: "sk-",
+  apiKey: "",
 });
 
 export const useOpenAI = () => {
