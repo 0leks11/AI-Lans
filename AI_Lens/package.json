@@ -1,0 +1,31 @@
+{
+  "name": "my-vue-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.5",
+    "@types/react-dom": "^19.0.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "typescript": "~5.6.2",
+    "vite": "^6.0.5"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.2.0",
+    "interactjs": "^1.10.27",
+    "marked": "^15.0.6",
+    "openai": "^4.78.1",
+    "pdfjs-dist": "^4.10.38",
+    "pspdfkit": "^2024.8.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}
