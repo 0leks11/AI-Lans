@@ -9,6 +9,7 @@ const openai = new OpenAI({
 
 export const useOpenAI = () => {
   const [responseHtml, setResponseHtml] = useState("");
+
   const sendToOpenAI = async (canvas?: HTMLCanvasElement) => {
     if (!canvas) return;
     const base64Image = canvas.toDataURL();
@@ -35,20 +36,26 @@ export const useOpenAI = () => {
       const content = response?.choices?.[0]?.message?.content;
       if (content) {
         const markdown = marked.parse(content);
-        setResponseHtml(markdown);
+        if (typeof markdown === "string") {
+          setResponseHtml(markdown);
+        }
       }
     } catch (err) {
       console.error("Error to request OpenAI:", err);
     }
   };
 
-  const handleResponse = async () => {
-    const result = await sendToOpenAI(canvasRef.current);
-    setResponseHtml(result);
+  const handleResponse = async (
+    canvasRef: React.RefObject<HTMLCanvasElement>
+  ) => {
+    if (canvasRef.current) {
+      await sendToOpenAI(canvasRef.current);
+    }
   };
 
   return {
     responseHtml,
     sendToOpenAI,
+    handleResponse,
   };
 };

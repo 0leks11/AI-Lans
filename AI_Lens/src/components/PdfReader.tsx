@@ -79,7 +79,7 @@ export const PdfReader = () => {
         </div>
 
         <div className="draggable border border-white/25  bg-blue-600/60 backdrop-blur flex flex-col md:w-1/2 ml-4 bg-blue-300 rounded-lg mb-16 p-4 min-h-fit">
-          <div className="Box  border-blue-500 rounded-md ">
+          <div className="Box  border-blue-500 rounded-md overflow-y-auto h-full">
             <div dangerouslySetInnerHTML={{ __html: responseHtml }} />
           </div>
         </div>
