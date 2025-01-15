@@ -2,7 +2,7 @@ import React from "react";
 import { usePdf } from "../context/pdfContext";
 import { ArrowDownTrayIcon } from "@heroicons/react/24/solid";
 
-function PDFUploader() {
+function PdfUploader() {
   const { openPDF } = usePdf();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,4 +30,4 @@ function PDFUploader() {
   );
 }
 
-export default PDFUploader;
+export default PdfUploader;
