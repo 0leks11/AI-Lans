@@ -42,6 +42,11 @@ export const useOpenAI = () => {
     }
   };
 
+  const handleResponse = async () => {
+    const result = await sendToOpenAI(canvasRef.current);
+    setResponseHtml(result);
+  };
+
   return {
     responseHtml,
     sendToOpenAI,
