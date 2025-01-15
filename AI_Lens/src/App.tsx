@@ -3,8 +3,9 @@ import PageSection from "./components/PageSection";
 import { PDFProvider } from "./context/pdfContext";
 
 export const App: React.FC = () => {
-  return <PDFProvider>
-    <PageSection />
-  </PDFProvider>
-   ;
+  return (
+    <PDFProvider>
+      <PageSection />
+    </PDFProvider>
+  );
 };

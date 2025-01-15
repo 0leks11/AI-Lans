@@ -18,8 +18,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true,
+    // "noUncheckedSideEffectImports": true,
     "jsx": "react"
   },
-  "include": ["src"]
+  "include": ["src", "global.d.ts"]
 }

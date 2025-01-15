@@ -55,11 +55,11 @@ export const PdfReader = () => {
   }, []);
 
   return (
-    <section className=" text-white max-w-7xl mx-auto rounded-lg mt-6 mb-6 p-8">
+    <section className=" text-white max-w-7xl mx-auto rounded-lg mt-6 mb-6 p-8 ">
       <div className="flex bg-slate-100 flex-row md:flex-row rounded-lg p-2">
-        <div className="flex flex-col md:w-1/2 md:pr-8 ml-4 mb-2">
+        <div className="flex flex-col md:w-1/2 md:pr-8 ml-4  mb-2">
           <PdfPage />
-          <div className="relative flex items-center h-full">
+          <div className="relative flex items-center">
             <div className="absolute left-1/2 transform -translate-x-1/2 text-slate-500">
               <PdfNavigation
                 currentPage={currentPage}
@@ -78,7 +78,7 @@ export const PdfReader = () => {
           </div>
         </div>
 
-        <div className="draggable border border-white/25  bg-blue-600/60 backdrop-blur flex flex-col md:w-1/2 ml-4 bg-blue-300 rounded-lg mb-16 p-4">
+        <div className="draggable border border-white/25  bg-blue-600/60 backdrop-blur flex flex-col md:w-1/2 ml-4 bg-blue-300 rounded-lg mb-16 p-4 min-h-fit">
           <div className="Box  border-blue-500 rounded-md ">
             <div dangerouslySetInnerHTML={{ __html: responseHtml }} />
           </div>
