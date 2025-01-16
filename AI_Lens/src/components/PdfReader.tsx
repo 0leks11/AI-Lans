@@ -3,8 +3,6 @@ import interact from "interactjs";
 import { usePdf } from "../context/pdfContext";
 import { PdfNavigation } from "./PdfNavigation";
 import { PdfPage } from "./PdfPage";
-// Удаляем неиспользуемый импорт useOpenAI, так как мы используем контекст
-// import { useOpenAI } from "../hooks/useOpenAI";
 import { ReUseButton } from "./ReUseButton";
 import { Collapsible } from "./Collapsible";
 import { ArrowUpRightIcon } from "@heroicons/react/24/solid";
@@ -16,11 +14,9 @@ export const PdfReader = () => {
   const { currentPage, totalPages, canvasRef, goToNextPage, goToPrevPage } =
     usePdf();
 
-  // Используем контекст для получения необходимых данных и функций
   const { responseHtml, sendToOpenAI, userPrompt, setUserPrompt } =
     useOpenAIContext();
 
-  // Добавлен sendToOpenAI в зависимости коллбэка для актуальности функции
   const handleSendToOpenAI = useCallback(() => {
     if (canvasRef.current) {
       sendToOpenAI(canvasRef.current);
@@ -90,7 +86,6 @@ export const PdfReader = () => {
           </div>
         </div>
         <div className="draggable border border-white/25 bg-blue-600/60 backdrop-blur flex flex-col md:w-1/2 ml-4 bg-blue-00 rounded-lg mb-16 p-4 min-h-fit">
-          {/* Обратите внимание на класс bg-blue-00 — возможно, это опечатка */}
           <div className="Box border-blue-900 rounded-md overflow-y-auto h-full flex flex-col">
             <div>
               <div className="flex flex-row p-2">
