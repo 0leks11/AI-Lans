@@ -5,12 +5,16 @@ import { PdfNavigation } from "./PdfNavigation";
 import { PdfPage } from "./PdfPage";
 import { useOpenAI } from "../hooks/useOpenAI";
 import { ReUseButton } from "./ReUseButton";
+import { Collapsible } from "./Collapsible";
+import { ArrowUpRightIcon } from "@heroicons/react/24/solid";
+import { SparklesIcon } from "@heroicons/react/24/solid";
+import PdfUploader from "./PdfUploader";
 
 export const PdfReader = () => {
   const { currentPage, totalPages, canvasRef, goToNextPage, goToPrevPage } =
     usePdf();
 
-  const { responseHtml, sendToOpenAI } = useOpenAI();
+  const { responseHtml, sendToOpenAI, userPrompt, setUserPrompt } = useOpenAI();
 
   const handleSendToOpenAI = useCallback(() => {
     if (canvasRef.current) {
@@ -55,11 +59,14 @@ export const PdfReader = () => {
   }, []);
 
   return (
-    <section className=" text-white max-w-7xl mx-auto rounded-lg mt-6 mb-6 p-8 ">
+    <section className="text-white bg-slate-100 max-w-7xl mx-auto rounded-lg mt-6 mb-6 p-8">
       <div className="flex bg-slate-100 flex-row md:flex-row rounded-lg p-2">
         <div className="flex flex-col md:w-1/2 md:pr-8 ml-4 min-h-80 mb-2">
           <PdfPage />
           <div className="relative flex items-center">
+            <div className="mr-auto">
+              <PdfUploader />
+            </div>
             <div className="absolute left-1/2 transform -translate-x-1/2 text-slate-500">
               <PdfNavigation
                 currentPage={currentPage}
@@ -77,10 +84,41 @@ export const PdfReader = () => {
             </div>
           </div>
         </div>
-
-        <div className="draggable border border-white/25  bg-blue-600/60 backdrop-blur flex flex-col md:w-1/2 ml-4 bg-blue-300 rounded-lg mb-16 p-4 min-h-fit">
-          <div className="Box  border-blue-500 rounded-md overflow-y-auto h-full">
-            <div dangerouslySetInnerHTML={{ __html: responseHtml }} />
+        <div className="draggable border border-white/25 bg-blue-600/60 backdrop-blur flex flex-col md:w-1/2 ml-4 bg-blue-00 rounded-lg mb-16 p-4 min-h-fit">
+          <div className="Box border-blue-900 rounded-md overflow-y-auto h-full flex flex-col">
+            <div>
+              <div className="flex flex-row p-2">
+                <SparklesIcon className="w-5 h-5 text-white mt-1" />
+                <div className="text-white text-lg font-semibold ml-1 ">
+                  Right AI reader
+                </div>
+              </div>
+              <div
+                dangerouslySetInnerHTML={{ __html: responseHtml }}
+                className="overflow-y-auto"
+              />
+            </div>
+            <div className="mt-auto relative">
+              <Collapsible
+                button={
+                  <p className="flex items-center justify-between bg-white text-gray-500 font-medium mx-2 rounded-full shadow hover:bg-gray-100 hover:text-gray-400 transition px-4 py-2 cursor-pointer">
+                    <p>Prompt</p>
+                    <ArrowUpRightIcon className="w-5 h-5 ml-6 stroke-[2] text-gray-500" />
+                  </p>
+                }
+                content={
+                  <div className="mt-2 ">
+                    <textarea
+                      id="prompt"
+                      value={userPrompt}
+                      onChange={(e) => setUserPrompt(e.target.value)}
+                      rows={5}
+                      className="w-full text-black p-2 border backdrop-blur-md shadow-lg rounded-lg bg-sky-100"
+                    />
+                  </div>
+                }
+              />
+            </div>
           </div>
         </div>
       </div>

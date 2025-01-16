@@ -8,7 +8,11 @@ const openai = new OpenAI({
 });
 
 export const useOpenAI = () => {
-  const [responseHtml, setResponseHtml] = useState("");
+  const [responseHtml, setResponseHtml] = useState<string>("");
+
+  const [userPrompt, setUserPrompt] = useState<string>(
+    `This image contains information that the user does not understand. Your task is to analyze the content of the image and provide a clear explanation. If the page contains multiple thoughts or statements, separate them. Your response should not contradict the author's explanations but should complement the text written by the author. Continue the narrative in the same style as the author. Do not add commentary from yourself, but do not use headings or introductory words.`
+  );
 
   const sendToOpenAI = async (canvas?: HTMLCanvasElement) => {
     if (!canvas) return;
@@ -22,7 +26,8 @@ export const useOpenAI = () => {
             content: [
               {
                 type: "text",
-                text: `This image contains information that the user does not understand. Your task is to analyze the content of the image and provide a clear explanation.  If the page contains multiple thoughts or statements, separate them. Your response should not contradict the author's explanations but should complement the text written by the author. Continue the narrative in the same style as the author. Do not add commentary from yourself, but do not use headings or introductory words.`,
+                
+                text: userPrompt,
               },
               {
                 type: "image_url",
@@ -57,5 +62,7 @@ export const useOpenAI = () => {
     responseHtml,
     sendToOpenAI,
     handleResponse,
+    userPrompt,
+    setUserPrompt,
   };
 };
