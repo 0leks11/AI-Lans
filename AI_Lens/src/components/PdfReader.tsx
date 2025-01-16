@@ -3,26 +3,31 @@ import interact from "interactjs";
 import { usePdf } from "../context/pdfContext";
 import { PdfNavigation } from "./PdfNavigation";
 import { PdfPage } from "./PdfPage";
-import { useOpenAI } from "../hooks/useOpenAI";
+// Удаляем неиспользуемый импорт useOpenAI, так как мы используем контекст
+// import { useOpenAI } from "../hooks/useOpenAI";
 import { ReUseButton } from "./ReUseButton";
 import { Collapsible } from "./Collapsible";
 import { ArrowUpRightIcon } from "@heroicons/react/24/solid";
 import { SparklesIcon } from "@heroicons/react/24/solid";
+import { useOpenAIContext } from "../context/OpenAIContext";
 import PdfUploader from "./PdfUploader";
 
 export const PdfReader = () => {
   const { currentPage, totalPages, canvasRef, goToNextPage, goToPrevPage } =
     usePdf();
 
-  const { responseHtml, sendToOpenAI, userPrompt, setUserPrompt } = useOpenAI();
+  // Используем контекст для получения необходимых данных и функций
+  const { responseHtml, sendToOpenAI, userPrompt, setUserPrompt } =
+    useOpenAIContext();
 
+  // Добавлен sendToOpenAI в зависимости коллбэка для актуальности функции
   const handleSendToOpenAI = useCallback(() => {
     if (canvasRef.current) {
       sendToOpenAI(canvasRef.current);
     } else {
       console.error("Canvas is not ready");
     }
-  }, [canvasRef]);
+  }, [canvasRef, sendToOpenAI]);
 
   useEffect(() => {
     function dragMoveListener(event: any) {
@@ -85,11 +90,12 @@ export const PdfReader = () => {
           </div>
         </div>
         <div className="draggable border border-white/25 bg-blue-600/60 backdrop-blur flex flex-col md:w-1/2 ml-4 bg-blue-00 rounded-lg mb-16 p-4 min-h-fit">
+          {/* Обратите внимание на класс bg-blue-00 — возможно, это опечатка */}
           <div className="Box border-blue-900 rounded-md overflow-y-auto h-full flex flex-col">
             <div>
               <div className="flex flex-row p-2">
                 <SparklesIcon className="w-5 h-5 text-white mt-1" />
-                <div className="text-white text-lg font-semibold ml-1 ">
+                <div className="text-white text-lg font-semibold ml-1">
                   Right AI reader
                 </div>
               </div>
@@ -102,12 +108,12 @@ export const PdfReader = () => {
               <Collapsible
                 button={
                   <p className="flex items-center justify-between bg-white text-gray-500 font-medium mx-2 rounded-full shadow hover:bg-gray-100 hover:text-gray-400 transition px-4 py-2 cursor-pointer">
-                    <p>Prompt</p>
+                    <span>Prompt</span>
                     <ArrowUpRightIcon className="w-5 h-5 ml-6 stroke-[2] text-gray-500" />
                   </p>
                 }
                 content={
-                  <div className="mt-2 ">
+                  <div className="mt-2 prompt-editor">
                     <textarea
                       id="prompt"
                       value={userPrompt}
