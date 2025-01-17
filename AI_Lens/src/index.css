@@ -15,3 +15,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.paragraph-container p {
+  @apply border-2 border-transparent rounded p-2;
+}
+
+.paragraph-container p:hover {
+  @apply border-white;
+}

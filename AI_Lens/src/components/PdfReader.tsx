@@ -96,15 +96,6 @@ export const PdfReader = () => {
                 </div>
               </div>
 
-              <div>
-                <div className="flex  max-h-[650px] overflow-y-auto">
-                  <div
-                    className="space-y-4 p-2"
-                    dangerouslySetInnerHTML={{ __html: responseHtml }}
-                  />
-                </div>
-              </div>
-
               <div className="absolute bottom-0 left-0 px-4 mb-2 w-full">
                 <Collapsible
                   button={
@@ -113,6 +104,29 @@ export const PdfReader = () => {
                       <ArrowUpRightIcon className="w-5 h-5 ml-6 stroke-[2] text-gray-500" />
                     </p>
                   }
+                  directionAbove={true}
+                  content={
+                    <div className="mt-3 prompt-editor">
+                      <textarea
+                        id="prompt"
+                        value={userPrompt}
+                        onChange={(e) => setUserPrompt(e.target.value)}
+                        rows={5}
+                        className="w-full text-black p-2 border backdrop-blur-md shadow-lg rounded-lg bg-sky-100"
+                      />
+                    </div>
+                  }
+                />
+              </div>
+              <div className="absolute bottom-0 left-0 px-4 mb-2 w-full">
+                <Collapsible
+                  button={
+                    <p className="flex self-end justify-between bg-white text-gray-500 font-medium mx-2 rounded-full shadow hover:bg-gray-100 hover:text-gray-400 transition px-4  py-2 cursor-pointer">
+                      <span>Prompt</span>
+                      <ArrowUpRightIcon className="w-5 h-5 ml-6 stroke-[2] text-gray-500" />
+                    </p>
+                  }
+                  directionAbove={true}
                   content={
                     <div className=" mt-3 prompt-editor">
                       <textarea
