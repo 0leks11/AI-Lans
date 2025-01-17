@@ -23,6 +23,7 @@ export interface IPDFContext {
   currentPage: number;
   totalPages: number;
   canvasRef: RefObject<HTMLCanvasElement | null>;
+  pdfDoc: pdfjsLib.PDFDocumentProxy | null;
 }
 
 const pdfContext = createContext<IPDFContext | null>(null);
@@ -68,7 +69,9 @@ export const PDFProvider = ({ children }: React.PropsWithChildren) => {
       canvas.style.height = Math.floor(viewport.height) + "px";
 
       const transform =
-        outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : [];
+        outputScale !== 1
+          ? [outputScale, 0, 0, outputScale, 0, 0]
+          : [1, 0, 0, 1, 0, 0];
 
       const renderContext = {
         canvasContext: context,
@@ -91,6 +94,7 @@ export const PDFProvider = ({ children }: React.PropsWithChildren) => {
         currentPage,
         totalPages,
         canvasRef,
+        pdfDoc,
       }}
     >
       {children}
