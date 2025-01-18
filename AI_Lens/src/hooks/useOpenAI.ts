@@ -13,13 +13,14 @@ export const useOpenAI = () => {
   const [responseHtml, setResponseHtml] = useState<string>("");
 
   const [userPrompt, setUserPrompt] = useState<string>(
-    `Эти изображения содержат информацию, которую пользователь не понимает. Ваша задача — проанализировать содержимое изображений и предоставить четкое объяснение
-     постранично. Информация с каждого изображения-страницы должна быть разделена по разным параграфам. Уловите общий контекст всех загруженных изображений-страниц и сформулируйте ответ так, чтобы:
-      Информация, полученная с первой карточки страницы фотографии, была обработана с учётом общего контекста всех страниц и отображена в первом параграфе.
-      Информация со второго изображения-страницы была также обработана с учётом контекста всех страниц и отображена во втором параграфе.
-      Информация с третьей карточки страницы вместе с общим контекстом всех страниц была обработана и представлена в отдельном третьем параграфе.
-      Если на изображении представлены несколько мыслей или утверждений, разделите их. Ваш ответ не должен противоречить объяснениям автора,
-       а должен дополнять текст, написанный автором. Продолжайте повествование в том же стиле, что и у автора. Не добавляйте комментарии от себя и не используйте заголовки или вводные слова. Отправьте информацию, разделяя её абзацами. Внутри каждого абзаца начинайте новую мысль с новой строки.Если на странице указано несколько строп текста, в этом случае действительно тут нечего больше добавить. Но если на этой странице книги довольно много информации и мыслей, которые хотел передать автор, на этом стоит заострить внимание И попытаться вдумчиво провести разбор содержимого и мыслей с последующим объяснением мыслей автора.Даже если из-за этого разбор страницы и мыслей станет довольно объемным. `
+    `These images contain information that the user does not understand. Your task is to analyze the content of the images and provide a clear explanation for each page. The information from each image-page should be divided into separate paragraphs. Capture the overall context of all uploaded image-pages and formulate the response as follows:
+	•	The information from the first image-page card should be processed in the context of all the pages and displayed in the first paragraph.
+	•	The information from the second image-page should also be processed with the overall context of all pages and displayed in the second paragraph.
+	•	The information from the third image-page, along with the general context of all pages, should be processed and presented in a separate third paragraph.
+
+If an image contains multiple ideas or statements, separate them. Your response must not contradict the author’s explanations but should complement the text written by the author. Continue the narrative in the same style as the author. Do not add your own commentary, and do not use headings or introductory words. Provide the information separated by paragraphs. Within each paragraph, start a new thought on a new line.
+
+If the page contains only a few lines of text, there may not be much to add. However, if the page contains substantial information and ideas that the author intended to convey, focus on those. Attempt to thoughtfully analyze the content and the author’s ideas, providing subsequent explanations. Even if this makes the analysis of the page and its ideas quite extensive, give it the necessary attention.`
   );
 
   const { pdfDoc, currentPage, totalPages } = usePdf();
