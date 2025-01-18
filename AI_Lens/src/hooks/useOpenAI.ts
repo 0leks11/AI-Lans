@@ -13,7 +13,13 @@ export const useOpenAI = () => {
   const [responseHtml, setResponseHtml] = useState<string>("");
 
   const [userPrompt, setUserPrompt] = useState<string>(
-    `This image contains information that the user does not understand. Your task is to analyze the content of the image and provide a clear explanation. If the page contains multiple thoughts or statements, separate them. Your response should not contradict the author's explanations but should complement the text written by the author. Continue the narrative in the same style as the author. Do not add commentary from yourself, but do not use headings or introductory words.Send me information, separating it with paragraph spacing. Each interval should divide the content retrieved from each page.`
+    `Эти изображения содержат информацию, которую пользователь не понимает. Ваша задача — проанализировать содержимое изображений и предоставить четкое объяснение
+     постранично. Информация с каждого изображения-страницы должна быть разделена по разным параграфам. Уловите общий контекст всех загруженных изображений-страниц и сформулируйте ответ так, чтобы:
+      Информация, полученная с первой карточки страницы фотографии, была обработана с учётом общего контекста всех страниц и отображена в первом параграфе.
+      Информация со второго изображения-страницы была также обработана с учётом контекста всех страниц и отображена во втором параграфе.
+      Информация с третьей карточки страницы вместе с общим контекстом всех страниц была обработана и представлена в отдельном третьем параграфе.
+      Если на изображении представлены несколько мыслей или утверждений, разделите их. Ваш ответ не должен противоречить объяснениям автора,
+       а должен дополнять текст, написанный автором. Продолжайте повествование в том же стиле, что и у автора. Не добавляйте комментарии от себя и не используйте заголовки или вводные слова. Отправьте информацию, разделяя её абзацами. Внутри каждого абзаца начинайте новую мысль с новой строки.Если на странице указано несколько строп текста, в этом случае действительно тут нечего больше добавить. Но если на этой странице книги довольно много информации и мыслей, которые хотел передать автор, на этом стоит заострить внимание И попытаться вдумчиво провести разбор содержимого и мыслей с последующим объяснением мыслей автора.Даже если из-за этого разбор страницы и мыслей станет довольно объемным. `
   );
 
   const { pdfDoc, currentPage, totalPages } = usePdf();
@@ -51,7 +57,7 @@ export const useOpenAI = () => {
     if (!pdfDoc) return [];
 
     const images: string[] = [];
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 3; i++) {
       const pageNum = currentPage + i;
       if (pageNum <= totalPages) {
         const base64 = await renderPageToBase64(pdfDoc, pageNum);
