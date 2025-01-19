@@ -4,5 +4,5 @@ import { usePdf } from "../context/pdfContext";
 export const PdfPage: React.FC = () => {
   const { canvasRef } = usePdf();
 
-  return <canvas ref={canvasRef} className="border mb-4" />;
+  return <canvas ref={canvasRef} className="" />;
 };

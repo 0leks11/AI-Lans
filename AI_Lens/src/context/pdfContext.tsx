@@ -17,6 +17,7 @@ if (import.meta.env.DEV) {
 }
 
 export interface IPDFContext {
+  closePDF: () => void;
   openPDF: (file: File) => void;
   goToNextPage: () => void;
   goToPrevPage: () => void;
@@ -33,6 +34,11 @@ export const PDFProvider = ({ children }: React.PropsWithChildren) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  const closePDF = useCallback(() => {
+    setPdfDoc(null);
+    setCurrentPage(1);
+  }, []);
 
   const openPDF = useCallback((file: File) => {
     file.arrayBuffer().then(async (arrayBuffer) => {
@@ -53,9 +59,12 @@ export const PDFProvider = ({ children }: React.PropsWithChildren) => {
 
   useEffect(() => {
     if (!pdfDoc) return;
+
     const renderPage = async () => {
       const page = await pdfDoc.getPage(currentPage);
-      const viewport = page.getViewport({ scale: 1 });
+
+      const desiredScale = 0.9;
+      const viewport = page.getViewport({ scale: desiredScale });
 
       if (!canvasRef.current) return;
       const canvas = canvasRef.current;
@@ -88,6 +97,7 @@ export const PDFProvider = ({ children }: React.PropsWithChildren) => {
   return (
     <pdfContext.Provider
       value={{
+        closePDF,
         openPDF,
         goToNextPage,
         goToPrevPage,
