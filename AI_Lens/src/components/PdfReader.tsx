@@ -69,10 +69,10 @@ export const PdfReader = () => {
             <div>
               <PdfUploader />
             </div>
-            <div className="draggable relative Box top-0 left-0 z-30 px-4 mb-2 w-full ">
+            <div className=" relative Box top-0 left-0 z-30 px-4 mb-2  ">
               <Collapsible
                 button={
-                  <div className="flex flex-row bg-red text-blue-500 font-medium  rounded-full transition cursor-pointer">
+                  <div className="absolute top-0  right-0 flex flex-row bg-red text-blue-500 font-medium  rounded-full transition cursor-pointer">
                     <SparklesIcon className="w-5 h-5 text-blue-500 mt-1" />
                   </div>
                 }
@@ -81,16 +81,12 @@ export const PdfReader = () => {
                   <ChevronDownIcon className="w-5 h-5 stroke-[2] mt-2 text-white" />
                 }
                 content={
-                  <div className="Box w-full absolute text-white top-0 left-0 z-40 border-blue-900 rounded-md justify-between flex w-full flex-col border border-white/25 bg-blue-600/60  backdrop-blur md:w-1/2 bg-blue-00 rounded-lg shadow-lg">
+                  <div className="draggable Box min-w-[550px]  absolute text-white top-full left-0 z-40 border-blue-900 rounded-md justify-between flex w-full flex-col border border-white/25 bg-blue-600/60  backdrop-blur md:w-1/2 bg-blue-00 rounded-lg shadow-lg">
                     <div className="">
-                      <div>
-                        <div className="flex  overflow-y-auto">
-                          <div
-                            className="space-y-4 p-2  mb-8 paragraph-container"
-                            dangerouslySetInnerHTML={{ __html: responseHtml }}
-                          />
-                        </div>
-                      </div>
+                      <div
+                        className=" Box space-y-4 p-4 mb-14 max-h-[650px]  overflow-y-auto mb-8 "
+                        dangerouslySetInnerHTML={{ __html: responseHtml }}
+                      />
 
                       <div className="absolute bottom-0 left-0 px-4 mb-2 w-full">
                         <Collapsible

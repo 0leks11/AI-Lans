@@ -1,4 +1,3 @@
-// src/components/ResumeSection/Arrow.tsx
 import React from "react";
 
 interface ArrowProps {
