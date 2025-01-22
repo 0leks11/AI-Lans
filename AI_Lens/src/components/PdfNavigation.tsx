@@ -34,7 +34,7 @@ export const PdfNavigation: React.FC<PdfNavigationProps> = ({
         onClick={onNextPage}
         disabled={currentPage >= totalPages}
         icon={
-          <ArrowRightIcon className="self-end text-slate-500 stroke-[2] h-6 w-6 ml-3 transition-transform duration-500 ease-in-out group-hover:translate-x-2" />
+          <ArrowRightIcon className="self-end text-slate-500 stroke-[2] h-6 w-6 mr-3 transition-transform duration-500 ease-in-out group-hover:translate-x-2" />
         }
       />
     </div>

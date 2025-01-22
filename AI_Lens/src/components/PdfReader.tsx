@@ -71,14 +71,14 @@ export const PdfReader = () => {
     <section className="flex justify-center items-center min-h-screen bg-slate-100 p-8">
       <div className="flex bg-slate-100 flex-row rounded-lg p-2">
         <div className="flex flex-col min-w-[550px] min-h-[700px] md:pr-8 ml-4 mb-2">
-          <div className="flex flex-row mb-1 justify-between ">
+          <div className="flex flex-row justify-between ">
             <div>
               <PdfUploader />
             </div>
-            <div className="relative Box top-0 left-0 z-30 px-6 mb-2">
+            <div className="relative  z-30 ">
               <Collapsible
                 button={
-                  <div className="absolute top-0 right-0 z-50 flex flex-row text-blue-500 font-medium rounded-full transition cursor-pointer">
+                  <div className="relative flex justify-end text-blue-500 font-medium rounded-full transition cursor-pointer">
                     <ReUseButton
                       onClick={toggleAILens}
                       button={<p className="">{aiLensActive}</p>}
@@ -90,16 +90,17 @@ export const PdfReader = () => {
                 }
                 directionAbove={false}
                 content={
-                  <div className="draggable Box min-w-[555px] absolute text-white top-full left-0 z-40 border-blue-900 rounded-md justify-between flex w-full flex-col border border-white/25 bg-blue-700/50 backdrop-blur md:w-1/2 rounded-lg shadow-lg">
+                  <div className="draggable absolute top-full right-0 w-[552px] z-40 text-white border-blue-900 rounded-md flex border border-white/25 bg-blue-700/50 backdrop-blur shadow-lg">
                     <div>
                       <p className="flex flex-row text-xl font-bold pt-4 px-5">
                         <SparklesIcon className="w-5 h-5 text-white mr-1 mt-1" />
                         Right AI reader
                       </p>
                       <div
-                        className="Box space-y-4 p-4 mb-16 mt-2 min-h-[635px] max-h-[612px] overflow-y-auto mb-8 paragraph-container"
+                        className="Box space-y-2 p-4  mt-2 min-h-[600px] max-h-[600px] overflow-y-auto mb-8 paragraph-container"
                         dangerouslySetInnerHTML={{ __html: responseHtml }}
                       />
+                      <p className=" p-4 px-5"></p>
 
                       <div className="absolute bottom-0 left-0 px-4 mb-2 w-full">
                         <Collapsible
