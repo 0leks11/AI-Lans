@@ -78,7 +78,7 @@ export const PdfReader = () => {
             <div className="relative  z-30 ">
               <Collapsible
                 button={
-                  <div className="relative flex justify-end text-blue-500 font-medium rounded-full transition cursor-pointer">
+                  <div className="relative flex justify-end z-50 text-blue-500 font-medium rounded-full transition cursor-pointer">
                     <ReUseButton
                       onClick={toggleAILens}
                       button={<p className="">{aiLensActive}</p>}
