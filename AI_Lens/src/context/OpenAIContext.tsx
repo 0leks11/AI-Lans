@@ -2,13 +2,13 @@ import React, { createContext, useContext } from "react";
 import { useOpenAI } from "../hooks/useOpenAI";
 
 interface OpenAIContextProps {
-  responseHtml: string;
-  sendToOpenAI: (canvas?: HTMLCanvasElement) => Promise<void>;
-  handleResponse: (
-    canvasRef: React.RefObject<HTMLCanvasElement>
-  ) => Promise<void>;
   userPrompt: string;
   setUserPrompt: React.Dispatch<React.SetStateAction<string>>;
+  preloadPageAI: (pageNum: number) => Promise<void>;
+  getPageAIResponse: (pageNum: number) => string | undefined;
+  pageResponses: Record<number, string>;
+  aiLensActive: boolean;
+  setAiLensActive: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const OpenAIContext = createContext<OpenAIContextProps | undefined>(undefined);
@@ -16,9 +16,30 @@ const OpenAIContext = createContext<OpenAIContextProps | undefined>(undefined);
 export const OpenAIProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const openAI = useOpenAI();
+  const {
+    userPrompt,
+    setUserPrompt,
+    preloadPageAI,
+    getPageAIResponse,
+    pageResponses,
+    aiLensActive,
+    setAiLensActive,
+  } = useOpenAI();
+
   return (
-    <OpenAIContext.Provider value={openAI}>{children}</OpenAIContext.Provider>
+    <OpenAIContext.Provider
+      value={{
+        userPrompt,
+        setUserPrompt,
+        preloadPageAI,
+        getPageAIResponse,
+        pageResponses,
+        aiLensActive,
+        setAiLensActive,
+      }}
+    >
+      {children}
+    </OpenAIContext.Provider>
   );
 };
 

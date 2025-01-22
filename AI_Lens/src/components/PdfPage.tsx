@@ -1,8 +1,7 @@
 import React from "react";
-import { usePdf } from "../context/pdfContext";
-
+import { usePdfContext } from "../context/pdfContext";
 export const PdfPage: React.FC = () => {
-  const { canvasRef } = usePdf();
+  const { canvasRef } = usePdfContext();
 
   return <canvas ref={canvasRef} className="" />;
 };

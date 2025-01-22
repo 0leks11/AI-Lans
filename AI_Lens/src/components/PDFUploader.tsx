@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { usePdf } from "../context/pdfContext";
+import { usePdfContext } from "../context/pdfContext";
 import { ArrowDownTrayIcon } from "@heroicons/react/24/solid";
 import { DocumentIcon } from "@heroicons/react/24/solid";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 
 export function PdfUploader() {
-  const { openPDF, closePDF } = usePdf();
+  const { openPDF, closePDF } = usePdfContext();
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 

@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { marked } from "marked";
 import OpenAI from "openai";
-import { usePdf } from "../context/pdfContext";
-import type * as pdfjsLib from "pdfjs-dist";
+import { usePdfContext } from "../context/pdfContext";
 
 const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
@@ -10,90 +9,32 @@ const openai = new OpenAI({
 });
 
 export const useOpenAI = () => {
-  const [responseHtml, setResponseHtml] = useState<string>("");
-
-  const [userPrompt, setUserPrompt] = useState<string>(
-    `These images contain information that the user does not understand. Your task is to analyze the content of the images and provide a clear explanation for each page. The information from each image-page should be divided into separate paragraphs. Capture the overall context of all uploaded image-pages and formulate the response as follows:
-	•	The information from the first image-page card should be processed in the context of all the pages and displayed in the first paragraph.
-	•	The information from the second image-page should also be processed with the overall context of all pages and displayed in the second paragraph.
-	•	The information from the third image-page, along with the general context of all pages, should be processed and presented in a separate third paragraph.
-
-If an image contains multiple ideas or statements, separate them. Your response must not contradict the author’s explanations but should complement the text written by the author. Continue the narrative in the same style as the author. Do not add your own commentary, and do not use headings or introductory words. Provide the information separated by paragraphs. Within each paragraph, start a new thought on a new line.
-
-If the page contains only a few lines of text, there may not be much to add. However, if the page contains substantial information and ideas that the author intended to convey, focus on those. Attempt to thoughtfully analyze the content and the author’s ideas, providing subsequent explanations. Even if this makes the analysis of the page and its ideas quite extensive, give it the necessary attention.`
+  const [pageResponses, setPageResponses] = useState<Record<number, string>>(
+    {}
   );
 
-  const { pdfDoc, currentPage, totalPages } = usePdf();
+  const [aiLensActive, setAiLensActive] = useState(false);
 
-  const renderPageToBase64 = async (
-    pdf: pdfjsLib.PDFDocumentProxy,
-    pageNumber: number
-  ): Promise<string> => {
-    const page = await pdf.getPage(pageNumber);
+  const [userPrompt, setUserPrompt] = useState<string>(`
+These contain information that the user does not understand. Your task is to analyze the content of the images and provide a clear explanation for each page. The information from each image-page should be divided into separate paragraphs. Capture the overall context of all uploaded image-pages and formulate the response as follows:
+	The information from the first image-page card should be processed in the context of all the pages and displayed in the first paragraph.
+	
+If an image contains multiple ideas or statements, separate them. Your response must not contradict the author’s explanations but should complement the text written by the author. Continue the narrative in the same style as the author. Do not add your own commentary, and do not use headings or introductory words. Provide the information separated by paragraphs. Within each paragraph, start a new thought on a new line.
 
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return "";
+If the page contains only a few lines of text, there may not be much to add. However, if the page contains substantial information and ideas that the author intended to convey, focus on those. Attempt to thoughtfully analyze the content and the author’s ideas, providing subsequent explanations. Even if this makes the analysis of the page and its ideas quite extensive, give it the necessary attention.
+  `);
 
-    const viewport = page.getViewport({ scale: 1 });
-    const outputScale = window.devicePixelRatio || 1;
-    canvas.width = Math.floor(viewport.width * outputScale);
-    canvas.height = Math.floor(viewport.height * outputScale);
+  const requestedPagesRef = useRef<Set<number>>(new Set());
 
-    const renderContext = {
-      canvasContext: ctx,
+  const { pdfDoc, currentPage, totalPages, renderPageOffscreen } =
+    usePdfContext();
 
-      transform:
-        outputScale !== 1
-          ? [outputScale, 0, 0, outputScale, 0, 0]
-          : [1, 0, 0, 1, 0, 0],
-      viewport,
-    };
-
-    await page.render(renderContext).promise;
-    return canvas.toDataURL("image/png");
-  };
-
-  const getFivePagesBase64 = async (): Promise<string[]> => {
-    if (!pdfDoc) return [];
-
-    const images: string[] = [];
-    for (let i = 0; i < 3; i++) {
-      const pageNum = currentPage + i;
-      if (pageNum <= totalPages) {
-        const base64 = await renderPageToBase64(pdfDoc, pageNum);
-        if (base64) images.push(base64);
-      } else {
-        break;
-      }
-    }
-    return images;
-  };
-
-  const sendToOpenAI = async () => {
+  const fetchAIForPage = async (base64Image: string): Promise<string> => {
+    const contentArray = [
+      { type: "text", text: userPrompt },
+      { type: "image_url", image_url: { url: base64Image } },
+    ];
     try {
-      if (!pdfDoc) {
-        console.error("PDF Document is not loaded yet.");
-        return;
-      }
-
-      const base64Images = await getFivePagesBase64();
-      if (base64Images.length === 0) {
-        console.error("No images were rendered.");
-        return;
-      }
-
-      const contentArray = [
-        {
-          type: "text",
-          text: userPrompt,
-        },
-        ...base64Images.map((img) => ({
-          type: "image_url",
-          image_url: { url: img },
-        })),
-      ];
-
       const response = await openai.chat.completions.create({
         model: "gpt-4o-mini",
         messages: [
@@ -103,28 +44,52 @@ If the page contains only a few lines of text, there may not be much to add. How
           },
         ],
       });
-
       const content = response?.choices?.[0]?.message?.content;
-      if (content) {
-        const markdown = marked.parse(content);
-        if (typeof markdown === "string") {
-          setResponseHtml(markdown);
-        }
-      }
+      if (!content) return "";
+      const markdown = marked.parse(content);
+      return typeof markdown === "string" ? markdown : "";
     } catch (err) {
       console.error("Error to request OpenAI:", err);
+      return "";
     }
   };
 
-  const handleResponse = async () => {
-    await sendToOpenAI();
+  const preloadPageAI = async (pageNum: number) => {
+    if (!pdfDoc) return;
+    if (requestedPagesRef.current.has(pageNum)) return;
+    if (pageNum < 1 || pageNum > totalPages) return;
+
+    requestedPagesRef.current.add(pageNum);
+
+    try {
+      const base64 = await renderPageOffscreen(pageNum, 1);
+      const aiHTML = await fetchAIForPage(base64);
+      setPageResponses((prev) => ({ ...prev, [pageNum]: aiHTML }));
+    } catch (e) {
+      console.error("preloadPageAI error:", e);
+    }
   };
 
+  const getPageAIResponse = (pageNum: number): string | undefined => {
+    return pageResponses[pageNum];
+  };
+
+  useEffect(() => {
+    if (!pdfDoc || !aiLensActive) return;
+    (async () => {
+      await preloadPageAI(currentPage);
+      await preloadPageAI(currentPage + 1);
+      await preloadPageAI(currentPage + 2);
+    })();
+  }, [pdfDoc, currentPage, aiLensActive]);
+
   return {
-    responseHtml,
-    sendToOpenAI,
-    handleResponse,
     userPrompt,
     setUserPrompt,
+    getPageAIResponse,
+    aiLensActive,
+    setAiLensActive,
+    pageResponses,
+    preloadPageAI,
   };
 };
