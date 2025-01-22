@@ -16,12 +16,16 @@ export const useOpenAI = () => {
   const [aiLensActive, setAiLensActive] = useState(false);
 
   const [userPrompt, setUserPrompt] = useState<string>(`
-These contain information that the user does not understand. Your task is to analyze the content of the images and provide a clear explanation for each page. The information from each image-page should be divided into separate paragraphs. Capture the overall context of all uploaded image-pages and formulate the response as follows:
+These contain information that the user does not understand. Your task is to analyze the content of the images and provide a clear 
+explanation for each page. The information from each image-page should be divided into separate paragraphs. Capture the overall context 
+of all uploaded image-pages and formulate the response as follows:
 	The information from the first image-page card should be processed in the context of all the pages and displayed in the first paragraph.
-	
-If an image contains multiple ideas or statements, separate them. Your response must not contradict the author’s explanations but should complement the text written by the author. Continue the narrative in the same style as the author. Do not add your own commentary, and do not use headings or introductory words. Provide the information separated by paragraphs. Within each paragraph, start a new thought on a new line.
-
-If the page contains only a few lines of text, there may not be much to add. However, if the page contains substantial information and ideas that the author intended to convey, focus on those. Attempt to thoughtfully analyze the content and the author’s ideas, providing subsequent explanations. Even if this makes the analysis of the page and its ideas quite extensive, give it the necessary attention.
+If an image contains multiple ideas or statements, separate them. Your response must not contradict the author’s explanations but should 
+complement the text written by the author. Continue the narrative in the same style as the author. Do not add your own commentary, and 
+do not use headings or introductory words. Provide the information separated by paragraphs. Within each paragraph, start a new thought on a new line.
+If the page contains only a few lines of text, there may not be much to add. However, if the page contains substantial information and 
+ideas that the author intended to convey, focus on those. Attempt to thoughtfully analyze the content and the author’s ideas, providing 
+subsequent explanations. Even if this makes the analysis of the page and its ideas quite extensive, give it the necessary attention.
   `);
 
   const requestedPagesRef = useRef<Set<number>>(new Set());
