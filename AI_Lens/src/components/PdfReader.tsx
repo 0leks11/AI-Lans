@@ -71,32 +71,33 @@ export const PdfReader = () => {
     <section className="flex justify-center items-center min-h-screen bg-slate-100 p-8">
       <div className="flex bg-slate-100 flex-row rounded-lg p-2">
         <div className="flex flex-col min-w-[550px] min-h-[700px] md:pr-8 ml-4 mb-2">
-          <div className="flex flex-row justify-between mb-2">
+          <div className="flex flex-row mb-1 justify-between ">
             <div>
               <PdfUploader />
             </div>
             <div className="relative Box top-0 left-0 z-30 px-6 mb-2">
               <Collapsible
                 button={
-                  <div className="absolute top-0 right-0 flex flex-row bg-red text-blue-500 font-medium rounded-full transition cursor-pointer">
+                  <div className="absolute top-0 right-0 z-50 flex flex-row text-blue-500 font-medium rounded-full transition cursor-pointer">
                     <ReUseButton
                       onClick={toggleAILens}
                       button={<p className="">{aiLensActive}</p>}
                       icon={
-                        <SparklesIcon className="w-5 h-5 text-blue-500 mt-1" />
+                        <SparklesIcon className="w-8 h-8 px-1 py-1 border border-slate-300 text-blue-600/60 text-backdrop-blur bg-slate-200  hover:bg-slate-100 rounded" />
                       }
                     />
                   </div>
                 }
                 directionAbove={false}
-                icon={
-                  <ChevronDownIcon className="w-5 h-5 stroke-[2] mt-2 text-white" />
-                }
                 content={
-                  <div className="draggable Box min-w-[550px] absolute text-white top-full left-0 z-40 border-blue-900 rounded-md justify-between flex w-full flex-col border border-white/25 bg-blue-600/60 backdrop-blur md:w-1/2 bg-blue-00 rounded-lg shadow-lg">
+                  <div className="draggable Box min-w-[555px] absolute text-white top-full left-0 z-40 border-blue-900 rounded-md justify-between flex w-full flex-col border border-white/25 bg-blue-700/50 backdrop-blur md:w-1/2 rounded-lg shadow-lg">
                     <div>
+                      <p className="flex flex-row text-xl font-bold pt-4 px-5">
+                        <SparklesIcon className="w-5 h-5 text-white mr-1 mt-1" />
+                        Right AI reader
+                      </p>
                       <div
-                        className="Box space-y-4 p-4 mb-14 max-h-[650px] overflow-y-auto mb-8"
+                        className="Box space-y-4 p-4 mb-16 mt-2 min-h-[635px] max-h-[612px] overflow-y-auto mb-8 paragraph-container"
                         dangerouslySetInnerHTML={{ __html: responseHtml }}
                       />
 
@@ -105,7 +106,7 @@ export const PdfReader = () => {
                           button={
                             <p className="flex self-end justify-between bg-white text-gray-500 font-medium rounded-full shadow hover:bg-gray-100 hover:text-gray-400 transition px-4 py-2 cursor-pointer">
                               <span>Prompt</span>
-                              <ArrowUpRightIcon className="w-5 h-5 ml-6 stroke-[2] text-gray-500" />
+                              <ArrowUpRightIcon className="w-5 h-5 ml-6 mt-1 stroke-[2] text-gray-500" />
                             </p>
                           }
                           directionAbove={true}

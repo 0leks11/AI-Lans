@@ -84,6 +84,7 @@ subsequent explanations. Even if this makes the analysis of the page and its ide
       await preloadPageAI(currentPage);
       await preloadPageAI(currentPage + 1);
       await preloadPageAI(currentPage + 2);
+      await preloadPageAI(currentPage + 3);
     })();
   }, [pdfDoc, currentPage, aiLensActive]);
 
