@@ -9,6 +9,7 @@ interface OpenAIContextProps {
   pageResponses: Record<number, string>;
   aiLensActive: boolean;
   setAiLensActive: React.Dispatch<React.SetStateAction<boolean>>;
+  sendCurrentPage: (pageNum: number) => Promise<void>;
 }
 
 const OpenAIContext = createContext<OpenAIContextProps | undefined>(undefined);
@@ -24,6 +25,7 @@ export const OpenAIProvider: React.FC<{ children: React.ReactNode }> = ({
     pageResponses,
     aiLensActive,
     setAiLensActive,
+    sendCurrentPage,
   } = useOpenAI();
 
   return (
@@ -36,6 +38,7 @@ export const OpenAIProvider: React.FC<{ children: React.ReactNode }> = ({
         pageResponses,
         aiLensActive,
         setAiLensActive,
+        sendCurrentPage,
       }}
     >
       {children}

@@ -7,12 +7,7 @@ import { ReUseButton } from "./ReUseButton";
 import { Collapsible } from "./Collapsible";
 import { useOpenAIContext } from "../context/OpenAIContext";
 import { PdfUploader } from "./PdfUploader";
-
-import {
-  ArrowUpRightIcon,
-  SparklesIcon,
-  ChevronDownIcon,
-} from "@heroicons/react/24/solid";
+import { ArrowUpRightIcon, SparklesIcon } from "@heroicons/react/24/solid";
 
 export const PdfReader = () => {
   const { currentPage, totalPages, handleNextPage, handlePrevPage } =
@@ -24,10 +19,15 @@ export const PdfReader = () => {
     setAiLensActive,
     userPrompt,
     setUserPrompt,
+    sendCurrentPage,
   } = useOpenAIContext();
 
   const responseHtml =
     getPageAIResponse(currentPage) || "<p>is thinking...</p>";
+
+  const handleSendCurrentPage = useCallback(async () => {
+    await sendCurrentPage(currentPage);
+  }, [sendCurrentPage, currentPage]);
 
   const toggleAILens = useCallback(() => {
     setAiLensActive((prev) => !prev);
@@ -126,7 +126,7 @@ export const PdfReader = () => {
                       </div>
                       <div className="absolute bottom-0 right-0 px-4 mb-4 mr-4 flex self-end justify-between bg-white text-gray-500 font-medium mx-2 rounded-full shadow hover:bg-gray-100 hover:text-gray-400 transition px-4 py-2 cursor-pointer">
                         <ReUseButton
-                          onClick={toggleAILens}
+                          onClick={handleSendCurrentPage}
                           button={<p>AI Lens</p>}
                         />
                       </div>
