@@ -2,19 +2,14 @@ import { useState, useEffect, useRef } from "react";
 import { marked } from "marked";
 import OpenAI from "openai";
 import { usePdfContext } from "../context/pdfContext";
-
-const openai = new OpenAI({
-  dangerouslyAllowBrowser: true,
-  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-});
+import { useOpenAIContext } from "../context/OpenAIContext";
+import type { ChatCompletionContentPart } from "openai/resources/chat/completions";
 
 export const useOpenAI = () => {
   const [pageResponses, setPageResponses] = useState<Record<number, string>>(
     {}
   );
-
   const [aiLensActive, setAiLensActive] = useState(false);
-
   const [userPrompt, setUserPrompt] = useState<string>(`
 These contain information that the user does not understand. Your task is to analyze the content of the images and provide a clear 
 explanation for each page. The information from each image-page should be divided into separate paragraphs. Capture the overall context 
@@ -29,24 +24,36 @@ subsequent explanations. Even if this makes the analysis of the page and its ide
   `);
 
   const requestedPagesRef = useRef<Set<number>>(new Set());
-
   const { pdfDoc, currentPage, totalPages, renderPageOffscreen } =
     usePdfContext();
+  const { openAIKey } = useOpenAIContext();
 
   const fetchAIForPage = async (base64Image: string): Promise<string> => {
-    const contentArray = [
+    if (!openAIKey) {
+      console.error("OpenAI API key is not set");
+      return "";
+    }
+
+    const openai = new OpenAI({
+      dangerouslyAllowBrowser: true,
+      apiKey: openAIKey,
+    });
+
+    const contentArray: ChatCompletionContentPart[] = [
       { type: "text", text: userPrompt },
       { type: "image_url", image_url: { url: base64Image } },
     ];
+
     try {
       const response = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "gpt-4o",
         messages: [
           {
             role: "user",
             content: contentArray,
           },
         ],
+        max_tokens: 1000,
       });
       const content = response?.choices?.[0]?.message?.content;
       if (!content) return "";

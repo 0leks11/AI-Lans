@@ -1,15 +1,9 @@
-import React, { createContext, useContext } from "react";
-import { useOpenAI } from "../hooks/useOpenAI";
+import React, { createContext, useContext, useState } from "react";
 
 interface OpenAIContextProps {
-  userPrompt: string;
-  setUserPrompt: React.Dispatch<React.SetStateAction<string>>;
-  preloadPageAI: (pageNum: number) => Promise<void>;
-  getPageAIResponse: (pageNum: number) => string | undefined;
-  pageResponses: Record<number, string>;
-  aiLensActive: boolean;
-  setAiLensActive: React.Dispatch<React.SetStateAction<boolean>>;
-  sendCurrentPage: (pageNum: number) => Promise<void>;
+  openAIKey: string | null;
+  setOpenAIKey: (key: string) => void;
+  isConnected: boolean;
 }
 
 const OpenAIContext = createContext<OpenAIContextProps | undefined>(undefined);
@@ -17,28 +11,14 @@ const OpenAIContext = createContext<OpenAIContextProps | undefined>(undefined);
 export const OpenAIProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const {
-    userPrompt,
-    setUserPrompt,
-    preloadPageAI,
-    getPageAIResponse,
-    pageResponses,
-    aiLensActive,
-    setAiLensActive,
-    sendCurrentPage,
-  } = useOpenAI();
+  const [openAIKey, setOpenAIKey] = useState<string | null>(null);
 
   return (
     <OpenAIContext.Provider
       value={{
-        userPrompt,
-        setUserPrompt,
-        preloadPageAI,
-        getPageAIResponse,
-        pageResponses,
-        aiLensActive,
-        setAiLensActive,
-        sendCurrentPage,
+        openAIKey,
+        setOpenAIKey,
+        isConnected: !!openAIKey,
       }}
     >
       {children}

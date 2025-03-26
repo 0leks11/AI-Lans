@@ -4,7 +4,7 @@ import { PDFProvider } from "./context/pdfContext";
 
 export const App: React.FC = () => {
   return (
-    <PDFProvider>
+    <PDFProvider pdfUrl="">
       <PageSection />
     </PDFProvider>
   );
