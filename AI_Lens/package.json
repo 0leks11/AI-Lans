@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "build": "npm install --legacy-peer-deps && tsc && vite build",
+    "preview": "vite preview",
+    "vercel-build": "npm install --legacy-peer-deps && tsc && vite build"
   },
   "devDependencies": {
     "@types/react": "^19.0.5",
