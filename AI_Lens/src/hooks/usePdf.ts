@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import * as pdfjsLib from "pdfjs-dist";
-import type { PDFDocumentProxy, OutlineNode } from "pdfjs-dist";
+import type { PDFDocumentProxy } from "pdfjs-dist"; // OutlineNode removed
 
 if (import.meta.env.DEV) {
   pdfjsLib.GlobalWorkerOptions.workerSrc =
@@ -13,7 +13,7 @@ export const usePdf = (pdfUrl: string) => {
   const [pdfDoc, setPdfDoc] = useState<PDFDocumentProxy | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
-  const [outline, setOutline] = useState<OutlineNode[]>([]);
+  const [outline, setOutline] = useState<any[]>([]); // Changed to any[]
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {

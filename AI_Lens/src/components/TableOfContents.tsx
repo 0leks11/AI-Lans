@@ -1,6 +1,6 @@
 import React from 'react';
 import { usePdfContext } from '../context/pdfContext';
-import type { OutlineNode } from 'pdfjs-dist'; // Adjusted for consistency with usePdf.ts
+// OutlineNode import removed
 
 interface TableOfContentsProps {
   // No props needed, will get everything from context
@@ -17,7 +17,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = () => {
     return <div className="p-4 text-sm text-gray-500">No table of contents found in this PDF.</div>;
   }
 
-  const handleTocItemClick = async (item: OutlineNode) => {
+  const handleTocItemClick = async (item: any) => { // Changed to any
     // Using the simplified version from the current subtask description
     if (item.dest && typeof item.dest === 'string') {
       const destArray = await pdfDoc.getDestination(item.dest);
@@ -35,7 +35,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = () => {
     }
   };
 
-  const renderOutlineNodes = (nodes: OutlineNode[] | undefined, level = 0): JSX.Element[] => {
+  const renderOutlineNodes = (nodes: any[] | undefined, level = 0): JSX.Element[] => { // Changed to any[]
     if (!nodes) return [];
     return nodes.map((node, index) => (
       <React.Fragment key={`${level}-${index}-${node.title}`}>

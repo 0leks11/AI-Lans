@@ -6,7 +6,7 @@ import React, {
   PropsWithChildren,
 } from "react";
 import type * as pdfjsLib from "pdfjs-dist";
-import type { OutlineNode } from "pdfjs-dist"; // Assuming OutlineNode is the correct type
+// OutlineNode import removed
 import { usePdf } from "../hooks/usePdf";
 
 export interface IPDFContext {
@@ -19,7 +19,7 @@ export interface IPDFContext {
   handleNextPage: () => void;
   canvasRef: RefObject<HTMLCanvasElement | null>;
   renderPageOffscreen: (pageNum: number, scale?: number) => Promise<string>;
-  outline: OutlineNode[]; // Using OutlineNode, change to any[] if not available
+  outline: any[]; // Changed to any[]
   navigateToPage: (pageNumber: number) => void;
 }
 
