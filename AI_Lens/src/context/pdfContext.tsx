@@ -6,6 +6,7 @@ import React, {
   PropsWithChildren,
 } from "react";
 import type * as pdfjsLib from "pdfjs-dist";
+import type { OutlineNode } from "pdfjs-dist"; // Assuming OutlineNode is the correct type
 import { usePdf } from "../hooks/usePdf";
 
 export interface IPDFContext {
@@ -18,6 +19,8 @@ export interface IPDFContext {
   handleNextPage: () => void;
   canvasRef: RefObject<HTMLCanvasElement | null>;
   renderPageOffscreen: (pageNum: number, scale?: number) => Promise<string>;
+  outline: OutlineNode[]; // Using OutlineNode, change to any[] if not available
+  navigateToPage: (pageNumber: number) => void;
 }
 
 const pdfContext = createContext<IPDFContext | null>(null);
@@ -36,6 +39,8 @@ export const PDFProvider: React.FC<PropsWithChildren<{ pdfUrl: string }>> = ({
     handleNextPage,
     canvasRef,
     renderPageOffscreen,
+    outline,
+    navigateToPage,
   } = usePdf(pdfUrl);
 
   useEffect(() => {
@@ -88,6 +93,8 @@ export const PDFProvider: React.FC<PropsWithChildren<{ pdfUrl: string }>> = ({
         handleNextPage,
         canvasRef,
         renderPageOffscreen,
+        outline,
+        navigateToPage,
       }}
     >
       {children}

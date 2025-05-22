@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import * as pdfjsLib from "pdfjs-dist";
+import type { PDFDocumentProxy, OutlineNode } from "pdfjs-dist";
 
 if (import.meta.env.DEV) {
   pdfjsLib.GlobalWorkerOptions.workerSrc =
@@ -9,9 +10,10 @@ if (import.meta.env.DEV) {
 }
 
 export const usePdf = (pdfUrl: string) => {
-  const [pdfDoc, setPdfDoc] = useState<pdfjsLib.PDFDocumentProxy | null>(null);
+  const [pdfDoc, setPdfDoc] = useState<PDFDocumentProxy | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
+  const [outline, setOutline] = useState<OutlineNode[]>([]);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -41,13 +43,30 @@ export const usePdf = (pdfUrl: string) => {
     file.arrayBuffer().then(async (arrayBuffer) => {
       const loadingTask = pdfjsLib.getDocument(arrayBuffer);
       try {
-        const loadedPdf = await loadingTask.promise;
-        setPdfDoc(loadedPdf);
-        setTotalPages(loadedPdf.numPages);
+        const newPdfDoc = await loadingTask.promise;
+        setPdfDoc(newPdfDoc);
+        setTotalPages(newPdfDoc.numPages);
+        if (newPdfDoc) {
+          try {
+            const pdfOutline = await newPdfDoc.getOutline();
+            setOutline(pdfOutline || []);
+          } catch (e) {
+            console.error("Error getting PDF outline:", e);
+            setOutline([]); // Set to empty array on error
+          }
+        }
       } catch (error) {
         console.error("Ошибка открытия PDF:", error);
       }
     });
+  };
+
+  const navigateToPage = (pageNumber: number) => {
+    if (pdfDoc && pageNumber > 0 && pageNumber <= pdfDoc.numPages) {
+      setCurrentPage(pageNumber);
+    } else {
+      console.warn(`Invalid page number: ${pageNumber}`);
+    }
   };
 
   const renderPageOffscreen = async (
@@ -92,5 +111,7 @@ export const usePdf = (pdfUrl: string) => {
     renderPageOffscreen,
     closePDF,
     openPDF,
+    outline,
+    navigateToPage,
   };
 };

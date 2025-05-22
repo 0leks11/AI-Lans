@@ -9,6 +9,7 @@ import { useOpenAIContext } from "../context/OpenAIContext";
 import { useAIContext } from "../context/AIContext";
 import { PdfUploader } from "./PDFUploader";
 import { ArrowUpRightIcon, SparklesIcon } from "@heroicons/react/24/solid";
+import TableOfContents from "./TableOfContents"; // Added import
 
 export const PdfReader = () => {
   const { currentPage, totalPages, handleNextPage, handlePrevPage } =
@@ -70,10 +71,15 @@ export const PdfReader = () => {
   }, []);
 
   return (
-    <section className="flex justify-center items-center min-h-screen bg-slate-100 p-8">
-      <div className="flex bg-slate-100 flex-row rounded-lg p-2">
-        <div className="flex flex-col min-w-[550px] min-h-[700px] md:pr-8 ml-4 mb-2">
-          <div className="flex flex-row justify-between ">
+    <section className="flex justify-center items-start min-h-screen bg-slate-100 p-8">
+      {/* Outer container for ToC and PDF Reader */}
+      <div className="flex flex-row bg-white shadow-xl rounded-lg overflow-hidden"> {/* Added overflow-hidden if ToC is tall */}
+        
+        <TableOfContents />
+
+        {/* Existing PDF viewer and controls column */}
+        <div className="flex flex-col min-w-[550px] min-h-[700px] p-4 md:pr-8"> {/* Adjusted padding, removed ml-4 */}
+          <div className="flex flex-row justify-between items-center mb-4"> {/* Added items-center and mb-4 for spacing */}
             <div>
               <PdfUploader />
             </div>
@@ -84,9 +90,9 @@ export const PdfReader = () => {
                     <div className="relative flex justify-end z-50 text-blue-500 font-medium rounded-full transition cursor-pointer">
                       <ReUseButton
                         onClick={toggleAILens}
-                        button={<p className="">{aiLensActive}</p>}
+                        button={<p className="">{aiLensActive ? "AI Lens Active" : "AI Lens"}</p>} // More descriptive text
                         icon={
-                          <SparklesIcon className="w-8 h-8 px-1 py-1 border border-slate-300 text-blue-600/60 text-backdrop-blur bg-slate-200 hover:bg-slate-100 rounded" />
+                          <SparklesIcon className="w-8 h-8 px-1 py-1 border border-slate-300 text-blue-600/60 bg-slate-200 hover:bg-slate-100 rounded" />
                         }
                       />
                     </div>
@@ -94,6 +100,7 @@ export const PdfReader = () => {
                   directionAbove={false}
                   content={
                     <div className="draggable absolute top-full right-0 w-[552px] z-40 text-white border-blue-900 rounded-md flex border border-white/25 bg-blue-700/50 backdrop-blur shadow-lg">
+                      {/* ... AI Lens content ... */}
                       <div>
                         <p className="flex flex-row text-xl font-bold pt-4 px-5">
                           <SparklesIcon className="w-5 h-5 text-white mr-1 mt-1" />
@@ -143,11 +150,11 @@ export const PdfReader = () => {
             )}
           </div>
 
-          <div className="border mb-4 item-cente rounded-md min-w-[550px] min-h-[700px]">
+          <div className="border item-center rounded-md min-w-[550px] min-h-[700px] flex justify-center items-center bg-slate-50"> {/* Added flex justify-center items-center bg-slate-50 for centering canvas */}
             <PdfPage />
           </div>
 
-          <div className="relative flex items-center">
+          <div className="relative flex items-center mt-4"> {/* Added mt-4 for spacing */}
             <div className="absolute left-1/2 transform -translate-x-1/2 text-slate-500">
               <PdfNavigation
                 currentPage={currentPage}
