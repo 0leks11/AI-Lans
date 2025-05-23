@@ -64,7 +64,7 @@ export const PdfReader = () => {
         
         {/* Sidebar container */}
         <div 
-          className={isTocOpen ? 'w-64' : 'w-0'}  // Simplified: removed transition classes and style prop
+          className={`transition-all duration-300 ease-in-out overflow-hidden ${isTocOpen ? 'w-64' : 'w-0'}`} // Re-added transition and overflow
         >
           {isTocOpen && <TableOfContents />}
         </div>

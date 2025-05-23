@@ -69,12 +69,13 @@ const TableOfContents = () => {
   }
 
   return (
-    // Main container: make it a flex column, remove its own overflow-y-auto if present from earlier versions
-    <div className="w-64 h-full bg-slate-50 border-r border-slate-300 p-4 flex flex-col">
-      <h3 className="text-lg font-semibold mb-3 text-slate-700 flex-shrink-0"> {/* Title: prevent shrinking */}
+    // Main container should be a flex column.
+    // It should take full height available from its parent in PdfReader.tsx (which is w-64 h-full).
+    <div className="w-full h-full bg-slate-50 p-4 flex flex-col"> {/* Ensure w-full, h-full; removed w-64 and border */}
+      <h3 className="text-lg font-semibold mb-3 text-slate-700 flex-shrink-0">
         Table of Contents
       </h3>
-      {/* List container: make it grow and scroll its content */}
+      {/* This div should contain the list and be scrollable if content overflows */}
       <div className="flex-grow overflow-y-auto"> 
         {renderOutlineNodes(outline)}
       </div>
