@@ -19,7 +19,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     // "noUncheckedSideEffectImports": true,
-    "jsx": "react-jsx"
+    "jsx": "react"
   },
   "include": ["src", "global.d.ts"]
 }
