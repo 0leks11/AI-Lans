@@ -113,7 +113,7 @@ export const PdfReader = () => {
                   directionAbove={false}
                   content={
                     <div className="draggable absolute top-full right-0 w-[552px] z-40 text-white border-blue-900 rounded-md flex border border-white/25 bg-blue-700/50 backdrop-blur shadow-lg">
-                      {/* ... AI Lens content ... */}
+                      {/* ... AI Lens content ... */} {/* Corrected JSX Comment */}
                       <div>
                         <p className="flex flex-row text-xl font-bold pt-4 px-5">
                           <SparklesIcon className="w-5 h-5 text-white mr-1 mt-1" />
