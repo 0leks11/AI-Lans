@@ -156,7 +156,7 @@ export const PdfReader = () => {
                           />
                         </div>
                       </div>
-                    </div>
+                    </div> {/* This closes the div started on line 115 */}
                   }
                 />
               </div>
