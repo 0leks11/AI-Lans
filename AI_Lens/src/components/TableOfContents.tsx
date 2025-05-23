@@ -2,10 +2,11 @@ import React from 'react';
 import { usePdfContext } from '../context/pdfContext';
 
 const TableOfContents = () => {
-  const { outline, navigateToPage, pdfDoc } = usePdfContext(); // navigateToPage added back
+  const { outline, navigateToPage, pdfDoc } = usePdfContext();
 
   const handleTocItemClick = async (item: any) => {
-    if (!pdfDoc || !navigateToPage) return; // Ensure pdfDoc and navigateToPage are available
+    // ... (existing function)
+    if (!pdfDoc || !navigateToPage) return; 
     if (item.dest && typeof item.dest === 'string') {
       try {
         const destArray = await pdfDoc.getDestination(item.dest);
@@ -33,13 +34,14 @@ const TableOfContents = () => {
   };
 
   const renderOutlineNodes = (nodes: any[] | undefined, level = 0): React.ReactNode[] => {
+    // ... (existing function)
     if (!nodes) return [];
     return nodes.map((node, index) => (
       <div key={`${level}-${index}-${node.title}`}>
         <div
           style={{ marginLeft: `${level * 20}px` }}
-          className="py-1 px-2 hover:bg-slate-200 rounded cursor-pointer" // cursor changed
-          onClick={() => handleTocItemClick(node)} // onClick added
+          className="py-1 px-2 hover:bg-slate-200 rounded cursor-pointer"
+          onClick={() => handleTocItemClick(node)}
         >
           {node.title}
         </div>
@@ -67,9 +69,13 @@ const TableOfContents = () => {
   }
 
   return (
-    <div className="w-64 h-full bg-slate-50 border-r border-slate-300 overflow-y-auto p-4">
-      <h3 className="text-lg font-semibold mb-3 text-slate-700">Table of Contents</h3>
-      <div>
+    // Main container: make it a flex column, remove its own overflow-y-auto if present from earlier versions
+    <div className="w-64 h-full bg-slate-50 border-r border-slate-300 p-4 flex flex-col">
+      <h3 className="text-lg font-semibold mb-3 text-slate-700 flex-shrink-0"> {/* Title: prevent shrinking */}
+        Table of Contents
+      </h3>
+      {/* List container: make it grow and scroll its content */}
+      <div className="flex-grow overflow-y-auto"> 
         {renderOutlineNodes(outline)}
       </div>
     </div>
