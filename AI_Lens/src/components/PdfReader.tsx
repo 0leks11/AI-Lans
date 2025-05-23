@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react"; // Added useState
 import interact from "interactjs";
 import { usePdfContext } from "../context/pdfContext";
 import { PdfNavigation } from "./PdfNavigation";
@@ -9,11 +9,19 @@ import { useOpenAIContext } from "../context/OpenAIContext";
 import { useAIContext } from "../context/AIContext";
 import { PdfUploader } from "./PDFUploader";
 import { ArrowUpRightIcon, SparklesIcon } from "@heroicons/react/24/solid";
-import TableOfContents from "./TableOfContents"; // Added import
+import TableOfContents from "./TableOfContents";
+import TocToggleButton from "./TocToggleButton"; // Import the new button
 
 export const PdfReader = () => {
   const { currentPage, totalPages, handleNextPage, handlePrevPage } =
     usePdfContext();
+
+  // State for ToC sidebar visibility
+  const [isTocOpen, setIsTocOpen] = useState(true); // Sidebar is open by default
+
+  const toggleTocSidebar = () => {
+    setIsTocOpen(prev => !prev);
+  };
 
   const { isConnected } = useOpenAIContext();
   const {
@@ -72,17 +80,22 @@ export const PdfReader = () => {
 
   return (
     <section className="flex justify-center items-start min-h-screen bg-slate-100 p-8">
-      {/* Outer container for ToC and PDF Reader */}
-      <div className="flex flex-row bg-white shadow-xl rounded-lg overflow-hidden"> {/* Added overflow-hidden if ToC is tall */}
+      <div className="flex flex-row bg-white shadow-xl rounded-lg overflow-hidden relative"> {/* Added relative */}
         
-        <TableOfContents />
+        {/* Sidebar container with transition for width */}
+        <div className={`transition-all duration-300 ease-in-out ${isTocOpen ? 'w-64' : 'w-0'}`} style={{ overflow: 'hidden' }}>
+          {isTocOpen && <TableOfContents />}
+        </div>
 
-        {/* Existing PDF viewer and controls column */}
-        <div className="flex flex-col min-w-[550px] min-h-[700px] p-4 md:pr-8"> {/* Adjusted padding, removed ml-4 */}
-          <div className="flex flex-row justify-between items-center mb-4"> {/* Added items-center and mb-4 for spacing */}
-            <div>
-              <PdfUploader />
-            </div>
+        {/* PDF Viewer Column */}
+        <div className="flex-grow transition-all duration-300 ease-in-out"> {/* Added transition classes */}
+          {/* The rest of the PDF viewer content */}
+          {/* Button's old wrapper div "absolute top-4 left-4 z-20" is removed from here */}
+          <div className="flex flex-col min-w-[550px] min-h-[700px] p-4 md:pr-8">
+            <div className="flex flex-row justify-between items-center mb-4">
+              <div>
+                <PdfUploader />
+              </div>
             {isConnected && (
               <div className="relative z-30">
                 <Collapsible
@@ -165,6 +178,19 @@ export const PdfReader = () => {
             </div>
           </div>
         </div>
+
+        {/* Toggle Button - Positioned absolutely relative to the main container */}
+        <div 
+          className="absolute top-1/2 -translate-y-1/2 z-30 transition-all duration-300 ease-in-out"
+          style={{ 
+            left: isTocOpen ? 'calc(16rem - 1.25rem)' : '0.5rem' 
+            // 16rem is w-64. 1.25rem is approx half of a typical 2.5rem button width.
+            // When closed, left is 0.5rem making it stick out slightly from the left edge.
+          }}
+        >
+          <TocToggleButton isOpen={isTocOpen} onClick={toggleTocSidebar} />
+        </div>
+
       </div>
     </section>
   );
