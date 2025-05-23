@@ -6,7 +6,7 @@ interface TableOfContentsProps {
   // No props needed, will get everything from context
 }
 
-const TableOfContents: React.FC<TableOfContentsProps> = () => {
+const TableOfContents = () => { // React.FC<TableOfContentsProps> removed
   const { outline, navigateToPage, pdfDoc } = usePdfContext();
 
   if (!pdfDoc) {
@@ -38,7 +38,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = () => {
   const renderOutlineNodes = (nodes: any[] | undefined, level = 0): JSX.Element[] => { // Changed to any[]
     if (!nodes) return [];
     return nodes.map((node, index) => (
-      <React.Fragment key={`${level}-${index}-${node.title}`}>
+      <div key={`${level}-${index}-${node.title}`}> {/* Replaced React.Fragment with div */}
         <li
           style={{ marginLeft: `${level * 20}px` }}
           className="py-1 px-2 hover:bg-slate-200 cursor-pointer rounded" // As per current subtask
@@ -51,7 +51,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = () => {
           // No specific class for nested ul as per current subtask
           <ul>{renderOutlineNodes(node.items, level + 1)}</ul>
         )}
-      </React.Fragment>
+      </div> // Replaced React.Fragment with div
     ));
   };
 
