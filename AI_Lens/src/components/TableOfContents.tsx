@@ -2,22 +2,48 @@ import React from 'react';
 import { usePdfContext } from '../context/pdfContext';
 
 const TableOfContents = () => {
-  const { outline, pdfDoc } = usePdfContext(); // navigateToPage is still temporarily removed
+  const { outline, navigateToPage, pdfDoc } = usePdfContext(); // navigateToPage added back
 
-  // The renderOutlineNodes function (recursive)
+  const handleTocItemClick = async (item: any) => {
+    if (!pdfDoc || !navigateToPage) return; // Ensure pdfDoc and navigateToPage are available
+    if (item.dest && typeof item.dest === 'string') {
+      try {
+        const destArray = await pdfDoc.getDestination(item.dest);
+        if (destArray && destArray[0]) {
+          const pageRef = destArray[0];
+          const pageIndex = await pdfDoc.getPageIndex(pageRef);
+          navigateToPage(pageIndex + 1);
+        } else {
+          console.warn('Destination string did not resolve:', item.dest);
+        }
+      } catch (e) {
+        console.error('Error resolving string destination:', e);
+      }
+    } else if (item.dest && Array.isArray(item.dest) && item.dest[0]) {
+      try {
+        const pageRef = item.dest[0];
+        const pageIndex = await pdfDoc.getPageIndex(pageRef);
+        navigateToPage(pageIndex + 1);
+      } catch (e) {
+        console.error('Error resolving array destination:', e);
+      }
+    } else {
+      console.warn('Table of Contents item has no valid destination:', item);
+    }
+  };
+
   const renderOutlineNodes = (nodes: any[] | undefined, level = 0): React.ReactNode[] => {
     if (!nodes) return [];
     return nodes.map((node, index) => (
-      // Using <div> instead of <React.Fragment> or <li> for now as a precaution
       <div key={`${level}-${index}-${node.title}`}>
         <div
           style={{ marginLeft: `${level * 20}px` }}
-          className="py-1 px-2 hover:bg-slate-200 rounded cursor-default" // cursor-default as no click yet
+          className="py-1 px-2 hover:bg-slate-200 rounded cursor-pointer" // cursor changed
+          onClick={() => handleTocItemClick(node)} // onClick added
         >
           {node.title}
         </div>
         {node.items && node.items.length > 0 && (
-          // Using <div> instead of <ul>
           <div>{renderOutlineNodes(node.items, level + 1)}</div>
         )}
       </div>
@@ -43,8 +69,7 @@ const TableOfContents = () => {
   return (
     <div className="w-64 h-full bg-slate-50 border-r border-slate-300 overflow-y-auto p-4">
       <h3 className="text-lg font-semibold mb-3 text-slate-700">Table of Contents</h3>
-      {/* Replace placeholder with actual rendering logic */}
-      <div> {/* This div acts like the main <ul> */}
+      <div>
         {renderOutlineNodes(outline)}
       </div>
     </div>
