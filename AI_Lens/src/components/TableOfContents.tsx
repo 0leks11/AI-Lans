@@ -1,11 +1,28 @@
 import React from 'react';
 import { usePdfContext } from '../context/pdfContext';
 
-// Re-defining TableOfContentsProps in case we want to use it later, but component won't use props explicitly yet.
-interface TableOfContentsProps {}
+const TableOfContents = () => {
+  const { outline, pdfDoc } = usePdfContext(); // navigateToPage is still temporarily removed
 
-const TableOfContents = () => { // Removed React.FC for now
-  const { outline, navigateToPage, pdfDoc } = usePdfContext(); // Added back context hook
+  // The renderOutlineNodes function (recursive)
+  const renderOutlineNodes = (nodes: any[] | undefined, level = 0): JSX.Element[] => {
+    if (!nodes) return [];
+    return nodes.map((node, index) => (
+      // Using <div> instead of <React.Fragment> or <li> for now as a precaution
+      <div key={`${level}-${index}-${node.title}`}>
+        <div
+          style={{ marginLeft: `${level * 20}px` }}
+          className="py-1 px-2 hover:bg-slate-200 rounded cursor-default" // cursor-default as no click yet
+        >
+          {node.title}
+        </div>
+        {node.items && node.items.length > 0 && (
+          // Using <div> instead of <ul>
+          <div>{renderOutlineNodes(node.items, level + 1)}</div>
+        )}
+      </div>
+    ));
+  };
 
   if (!pdfDoc) {
     return (
@@ -23,13 +40,12 @@ const TableOfContents = () => { // Removed React.FC for now
     );
   }
 
-  // Placeholder for actual outline rendering
   return (
     <div className="w-64 h-full bg-slate-50 border-r border-slate-300 overflow-y-auto p-4">
       <h3 className="text-lg font-semibold mb-3 text-slate-700">Table of Contents</h3>
-      <div id="toc-placeholder">
-        {/* Actual outline items will go here in a later step */}
-        <p className="text-sm text-slate-400">Outline will be rendered here.</p>
+      {/* Replace placeholder with actual rendering logic */}
+      <div> {/* This div acts like the main <ul> */}
+        {renderOutlineNodes(outline)}
       </div>
     </div>
   );
