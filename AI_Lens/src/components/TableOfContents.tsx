@@ -5,7 +5,7 @@ const TableOfContents = () => {
   const { outline, pdfDoc } = usePdfContext(); // navigateToPage is still temporarily removed
 
   // The renderOutlineNodes function (recursive)
-  const renderOutlineNodes = (nodes: any[] | undefined, level = 0): JSX.Element[] => {
+  const renderOutlineNodes = (nodes: any[] | undefined, level = 0): React.ReactNode[] => {
     if (!nodes) return [];
     return nodes.map((node, index) => (
       // Using <div> instead of <React.Fragment> or <li> for now as a precaution
