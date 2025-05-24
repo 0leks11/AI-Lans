@@ -113,6 +113,14 @@ export const usePdf = (pdfUrl: string) => {
     return offscreenCanvas.toDataURL("image/png");
   };
 
+  const rotateClockwise = useCallback(() => {
+    setRotation(prevRotation => (prevRotation + 90) % 360);
+  }, []);
+
+  const rotateCounterClockwise = useCallback(() => {
+    setRotation(prevRotation => (prevRotation - 90 + 360) % 360);
+  }, []);
+
   return {
     pdfDoc,
     currentPage,

@@ -1,33 +1,27 @@
-import React, { FC, ReactNode } from "react";
-import Arrow from "./Arrow";
+import React, { ReactNode } from 'react';
 
-interface PdfNavigationButtonProps {
-  onClick?: () => void;
+export interface PdfNavigationButtonProps {
+  onClick: () => void;
   disabled?: boolean;
-  icon?: ReactNode;
+  icon: ReactNode;
+  tooltip?: string; // Added tooltip prop
 }
 
-export const PdfNavigationButton: FC<PdfNavigationButtonProps> = ({
+export const PdfNavigationButton: React.FC<PdfNavigationButtonProps> = ({
   onClick,
   disabled,
   icon,
+  tooltip, // Destructure tooltip
 }) => {
-  const handleClick = (e: React.MouseEvent) => {
-    if (disabled) {
-      e.preventDefault();
-      return;
-    }
-    onClick?.();
-  };
-
   return (
-    <a
-      onClick={handleClick}
-      className={`group flex transition-colors no-underline ${
-        disabled ? "opacity-50 cursor-not-allowed" : ""
-      }`}
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className="p-1.5 rounded-full hover:bg-slate-200 disabled:opacity-50 disabled:cursor-not-allowed group transition-colors duration-150"
+      title={tooltip} // Use tooltip as title attribute
     >
-      <Arrow icon={icon} />
-    </a>
+      {icon}
+    </button>
   );
 };
